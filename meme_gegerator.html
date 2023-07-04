@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEME</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+        .container{
+            width: 100%;
+            height: auto;
+        }
+        
+        .row1{
+            height: 80px;
+            width: 100%;
+        }
+        .col1{
+            height: 80px;
+        }
+        button{
+            height: 40px;
+            width: 80px;
+            padding: 20px;
+            margin: 20px 20px 10px 20px;
+            color: white;
+            font-size: 1rem;    
+            font-family: cursive;
+        
+        }
+        h2{
+            font-size: x-large;
+            color: aqua;
+            padding: 10px;
+            margin: 20px 0px 0px 20px;
+            font-family: cursive;
+            text-align: center;
+            margin-right: 550px;
+        }
+        .row2{
+            width: 100%;
+            height: auto;
+        
+        }
+        .left{
+            text-align: center;
+            width: 400px;
+            height: 300px;
+            margin: 150px 50px 100px 150px;
+            border-radius: 50px;
+            padding: 20px;   
+            border: 6px solid rgb(91, 112, 109);  
+            font-family:cursive ;  
+        }
+        .right{
+            text-align: center;
+            width: 400px;
+            height: auto;
+            margin: 100px 50px 100px 250px;
+            border-radius: 50px;
+            padding: 20px;   
+            border: 6px solid rgb(65, 62, 66);  
+            font-family:cursive ;  
+            
+        }
+        .pic{
+            width: 300px;
+            height: 300px;
+            color: blanchedalmond;
+            line-height: 200px;
+            z-index: -1;
+            border: 4px solid rgb(50, 181, 18);
+        }
+        .btns{
+            width: 100px;
+            height: 50px;
+            border:2px solid white;
+            background-color: rgb(76, 148, 45);
+            border-radius: 30px;
+            margin: 20px 10px 20px 2px;
+            color: white;
+            cursor: pointer;
+            transition: 1s all;
+        }
+        .btns:hover{
+            width: 130px;
+            background-color: firebrick;
+        }
+    </style>
+</head>
+<body>
+    <div class="cointainer bg-dark">
+        <div class="row row1">
+            <div class="col-3 col1">
+                <a href="index.html"><button type="button" class="btn btn-primary">Back</button></a>
+            </div>
+            <div class="col-9">
+                <h2>MEME_BOX</h2>
+            </div>
+        </div> 
+        <!-- input boxes -->
+       <div class="row mx-auto bg-secondary-subtle row2">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 bg-secondary-subtle left">
+                <label>upload the file</label><br>
+                <input type="file" id="uploadInput"><br>
+                <label>Top Text</label><br>
+                <input type="text" id="top"><br><br>
+                <label>Bottom Text</label><br>
+                <input type="text" id="bottom"><br><br>
+                <input type="button"  value="Generate"  onclick="uploadText()">
+                
+            </div>
+
+            <!-- output of meme -->
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6   bg-secondary right">
+                <img src="#" alt="upload image" id="imagePreview" class="pic"><br>
+                <input type="reset" value="refresh" class="btns" onclick="window.location.reload(true)">
+                <a id="downloadLink" style="display: none;"></a>
+                <input type="submit"  value="Download" class="btns" onclick="downloadImageWithText()">
+            </div>
+        </div>
+
+
+    </div>
+    
+    <script>
+
+        // imageupload
+        var uploadInput = document.getElementById('uploadInput');
+        var imagePreview = document.getElementById('imagePreview');
+        uploadInput.addEventListener('change' ,
+         function(e) {
+            var file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+             }
+        });
+
+
+        function uploadText() {
+
+            // Get the uploaded file
+            var file = document.getElementById("uploadInput").files[0];
+
+        
+            // Create a FileReader object
+            var reader = new FileReader();
+
+            // Set up the FileReader onload event
+            reader.onload = function(e) {
+                
+                // Get the top and bottom text inputs
+                var topText = document.getElementById("top").value;
+                var bottomText = document.getElementById("bottom").value;
+
+                // Create a new canvas element
+                var canvas = document.createElement("canvas");
+                var ctx = canvas.getContext("2d");
+
+                // Set the canvas width and height to match the image
+                canvas.width = imagePreview.width;
+                canvas.height = imagePreview.height;
+
+                // Draw the image on the canvas
+                ctx.drawImage(imagePreview, 0, 0, canvas.width, canvas.height);
+
+                // Set the text properties
+                ctx.font = "bold 25px cursive";
+                ctx.fillStyle = "yellow";
+                ctx.strokeStyle = "blacks";
+                ctx.lineWidth = 2;
+                ctx.textAlign = "center";
+
+                // Set the top text position
+                var topTextX = canvas.width / 2;
+                var topTextY = 30;
+
+                // Draw the top text on the canvas
+                ctx.fillText(topText, topTextX, topTextY);
+                ctx.strokeText(topText, topTextX, topTextY);
+
+                // Set the bottom text position
+                var bottomTextX = canvas.width / 2;
+                var bottomTextY = canvas.height - 20;
+
+                // Draw the bottom text on the canvas
+                ctx.fillText(bottomText, bottomTextX, bottomTextY);
+                ctx.strokeText(bottomText, bottomTextX, bottomTextY);
+
+                // Get the data URL of the modified image
+                var memeImageUrl = canvas.toDataURL();
+
+                // Set the modified image source
+                imagePreview.src = memeImageUrl;
+            };
+
+            // Read the uploaded file as a data URL
+            reader.readAsDataURL(file);
+        }
+
+        function downloadImageWithText() {
+            // Get the modified image URL
+            var imageUrl = document.getElementById("imagePreview").src;
+
+            // Create a temporary anchor element
+            var link = document.createElement("a");
+            link.href = imageUrl;
+            link.download = "meme.jpg";
+
+            // Programmatically click the anchor element to trigger the download
+            link.click();
+        }
+
+        
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+
+</body>
+</html>
